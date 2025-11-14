@@ -1,0 +1,60 @@
+name: Deploy to Cloud Run
+on:
+  push:
+    branches: [ main ]
+
+env:
+  GCP_PROJECT_ID: your-gcp-project-id
+  GCP_REGION: eu-north1
+  REPOSITORY: ai-assistant-repo
+  SERVICE: ai-assistant-light
+
+permissions:
+  contents: read
+  id-token: write   # OIDC till GCP
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1) OIDC-auth mot GCP (Workload Identity Federation)
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOY_SA }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      # 2) Artifact Registry docker login
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${GCP_REGION}-docker.pkg.dev --quiet
+
+      # 3) Build & push image till Artifact Registry
+      - name: Compute image tag
+        id: vars
+        run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+      - name: Build & push
+        id: buildpush
+        run: |
+          IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${REPOSITORY}/${SERVICE}:${{ steps.vars.outputs.TAG }}"
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+          echo "IMAGE=$IMAGE" >> $GITHUB_OUTPUT
+
+      # 4) Deploy till Cloud Run
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${SERVICE} \
+            --image="${{ steps.buildpush.outputs.IMAGE }}" \
+            --region=${GCP_REGION} \
+            --platform=managed \
+            --allow-unauthenticated \
+            --cpu=1 --memory=512Mi --max-instances=5 --concurrency=80 \
+            --set-env-vars=PYTHONUNBUFFERED=1,ENV=prod \
+            --port=8080
