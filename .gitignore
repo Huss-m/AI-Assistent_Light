@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+credentials.json
+token.pickle
+.env
+.env.*
+token.json
+client_secret.json
+
+# Misc
+*.log
+
+# Byte-compiled
+*.pyc
+
+# SQLite DBs
+*.sqlite3
+
+
+
+# Lägg till raderna i .gitignore bara om de inte redan finns
+if (-not (Test-Path .gitignore)) { New-Item -Path .gitignore -ItemType File -Force | Out-Null }
+if (-not (Select-String -Path .gitignore -Pattern '^credentials.json$' -SimpleMatch -Quiet -ErrorAction SilentlyContinue)) {
+    Add-Content -Path .gitignore -Value "`n# Google OAuth secrets`ncredentials.json"
+}
+if (-not (Select-String -Path .gitignore -Pattern '^token.pickle$' -SimpleMatch -Quiet -ErrorAction SilentlyContinue)) {
+    Add-Content -Path .gitignore -Value "`ntoken.pickle"
+}
