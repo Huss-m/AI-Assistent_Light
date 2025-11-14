@@ -44,6 +44,3 @@ if (-not (Select-String -Path .gitignore -Pattern '^credentials.json$' -SimpleMa
 if (-not (Select-String -Path .gitignore -Pattern '^token.pickle$' -SimpleMatch -Quiet -ErrorAction SilentlyContinue)) {
     Add-Content -Path .gitignore -Value "`ntoken.pickle"
 }
-
-credentials.json
-.env
