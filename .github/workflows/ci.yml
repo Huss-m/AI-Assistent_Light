@@ -1,4 +1,5 @@
 name: CI
+
 on:
   pull_request:
     branches: [ main, dev ]
@@ -10,7 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write         # för GHCR (container registry)
+      packages: write
+
+    # 👇 Lägg till detta så alla `run:` körs inne i ai-assistant-light
+    defaults:
+      run:
+        working-directory: ai-assistant-light
+
     steps:
       - uses: actions/checkout@v4
 
@@ -54,6 +61,7 @@ jobs:
       - name: Build & push (GHCR)
         uses: docker/build-push-action@v6
         with:
-          context: .
+          # 👇 bygg från mappen ai-assistant-light
+          context: ai-assistant-light
           push: true
           tags: ${{ steps.meta.outputs.tags }}

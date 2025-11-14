@@ -43,7 +43,7 @@ jobs:
         id: buildpush
         run: |
           IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${REPOSITORY}/${SERVICE}:${{ steps.vars.outputs.TAG }}"
-          docker build -t "$IMAGE" .
+          docker build -t "$IMAGE" ai-assistant-light
           docker push "$IMAGE"
           echo "IMAGE=$IMAGE" >> $GITHUB_OUTPUT
 
