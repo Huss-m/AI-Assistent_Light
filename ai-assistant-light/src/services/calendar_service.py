@@ -19,6 +19,13 @@ CREDENTIALS_PATH = "credentials.json"
 
 
 def get_google_creds() -> Credentials:
+    # Cloud Run: använd service account credentials
+    if os.getenv("ENV") == "prod":
+        from google.auth import default
+        creds, _ = default(scopes=SCOPES)
+        return creds
+    
+    # Lokal utveckling: använd OAuth2 flow
     creds: Optional[Credentials] = None
     if os.path.exists(TOKEN_PATH):
         with open(TOKEN_PATH, "rb") as f:
