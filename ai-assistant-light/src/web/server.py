@@ -85,7 +85,7 @@ def debug():
     """Debug endpoint för att testa Google API access"""
     try:
         from services.gmail_service import build_gmail_service
-        gmail = build_gmail_service()
+        build_gmail_service()
         return {"gmail_service": "ok", "env": os.getenv("ENV", "dev")}
     except Exception as e:
         return {"gmail_service": "error", "error": str(e), "env": os.getenv("ENV", "dev")}
