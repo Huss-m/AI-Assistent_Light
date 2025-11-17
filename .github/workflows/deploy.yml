@@ -4,8 +4,8 @@ on:
     branches: [ dev ]
 
 env:
-  GCP_PROJECT_ID: your-gcp-project-id
-  GCP_REGION: eu-north1
+  GCP_PROJECT_ID: delta-compass-477214-e7
+  GCP_REGION: europe-north1
   REPOSITORY: ai-assistant-repo
   SERVICE: ai-assistant-light
 
