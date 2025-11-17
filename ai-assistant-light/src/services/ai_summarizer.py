@@ -58,7 +58,7 @@ Skriv:
 def simple_fallback_priorities(emails: List[Dict[str, Any]], events: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Enkel, offline fallback om ingen AI finns."""
     lines = []
-    lines.append(f"Sammanfattning:")
+    lines.append("Sammanfattning:")
     lines.append(f"📬 Olästa mejl: {len(emails)}")
     lines.append(f"📅 Händelser idag: {len(events)}")
     lines.append("")
