@@ -22,18 +22,18 @@ def get_google_creds() -> Credentials:
     # Cloud Run: använd service account credentials
     if os.getenv("ENV") == "prod":
         from google.auth import default
-        creds, _ = default(scopes=SCOPES)
-        return creds
+        prod_creds, _ = default(scopes=SCOPES)
+        return prod_creds
     
     # Lokal utveckling: använd OAuth2 flow
-    creds: Optional[Credentials] = None
+    local_creds: Optional[Credentials] = None
     if os.path.exists(TOKEN_PATH):
         with open(TOKEN_PATH, "rb") as f:
-            creds = pickle.load(f)
+            local_creds = pickle.load(f)
 
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+    if not local_creds or not local_creds.valid:
+        if local_creds and local_creds.expired and local_creds.refresh_token:
+            local_creds.refresh(Request())
         else:
             if not os.path.exists(CREDENTIALS_PATH):
                 raise FileNotFoundError(
@@ -42,10 +42,10 @@ def get_google_creds() -> Credentials:
             flow = InstalledAppFlow.from_client_secrets_file(
                 CREDENTIALS_PATH, SCOPES
             )
-            creds = flow.run_local_server(port=0)
+            local_creds = flow.run_local_server(port=0)
         with open(TOKEN_PATH, "wb") as f:
-            pickle.dump(creds, f)
-    return creds
+            pickle.dump(local_creds, f)
+    return local_creds
 
 
 def build_gmail_service():

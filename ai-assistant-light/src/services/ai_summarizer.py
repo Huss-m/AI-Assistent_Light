@@ -46,7 +46,8 @@ Skriv:
             temperature=0.4,
         )
 
-        text = resp.choices[0].message.content.strip()
+        content = resp.choices[0].message.content
+        text = content.strip() if content else "Ingen sammanfattning tillgänglig"
         return {
             "summary_text": text,
             "source": "openai",
