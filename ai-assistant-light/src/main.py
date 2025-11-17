@@ -18,12 +18,12 @@ def main() -> None:
         emails, events = [], []
 
     print(block(
-        "📬 Dagens olästa mejl",
+        "Dagens olästa mejl",
         "\n".join([f"{e['subject']} | {e['from']}" for e in emails]) or "(Inga)"
     ))
 
     print(block(
-        "📅 Dagens händelser",
+        "Dagens händelser",
         "\n".join([f"{ev['summary']} @ {ev['start']}" for ev in events]) or "(Inga)"
     ))
 
