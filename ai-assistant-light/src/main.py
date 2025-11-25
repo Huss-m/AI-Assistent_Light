@@ -4,6 +4,8 @@ from services.gmail_service import build_gmail_service, list_today_unread
 from services.calendar_service import build_calendar_service, list_todays_events
 from services.ai_summarizer import summarize_day
 from utils.cli_report import block
+from google.oauth2.credentials import Credentials
+from typing import List, Dict, Any
 
 
 def main() -> None:
@@ -35,3 +37,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

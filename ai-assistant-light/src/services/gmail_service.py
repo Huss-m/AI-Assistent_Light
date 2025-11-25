@@ -14,7 +14,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
 ]
 
-TOKEN_PATH = "token.pickle"
+TOKEN_PATH = "gmail_token.pickle"
 CREDENTIALS_PATH = "credentials.json"
 
 
@@ -55,7 +55,7 @@ def build_gmail_service():
 
 def list_today_unread(service, max_results: int = 10) -> List[Dict[str, Any]]:
     """Hämta dagens olästa mejl (enkelt, baserat på dagens datum)."""
-    today = dt.datetime.now().strftime("%Y/%m/%d")
+    today = dt.datetime.now(dt.timezone.utc).strftime("%Y/%m/%d")
     query = f"is:unread after:{today}"
 
     resp = (
@@ -93,3 +93,14 @@ def list_today_unread(service, max_results: int = 10) -> List[Dict[str, Any]]:
             }
         )
     return results
+
+
+def fetch_unread_emails_for_credentials(
+    creds: Credentials,
+    max_results: int = 10,
+) -> List[Dict[str, Any]]:
+    """
+    Variant av list_today_unread som använder Credentials från web-sessionen.
+    """
+    service = build("gmail", "v1", credentials=creds)
+    return list_today_unread(service, max_results=max_results)

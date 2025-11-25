@@ -4,7 +4,8 @@ import os
 import pickle
 import datetime as dt
 from typing import Any, Dict, List, Optional
-
+from google.oauth2.credentials import Credentials
+from typing import List, Dict, Any
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -14,7 +15,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/calendar.readonly",
 ]
 
-TOKEN_PATH = "token.pickle"
+TOKEN_PATH = "calendar_token.pickle"
 CREDENTIALS_PATH = "credentials.json"
 
 
@@ -55,9 +56,9 @@ def build_calendar_service():
 
 def list_todays_events(service, max_results: int = 20) -> List[Dict[str, Any]]:
     """Hämta dagens kalenderhändelser från primary-kalendern."""
-    now = dt.datetime.now()
-    start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0).isoformat() + 'Z'
-    end_of_day = now.replace(hour=23, minute=59, second=59, microsecond=0).isoformat() + 'Z'
+    now = dt.datetime.now(dt.timezone.utc)
+    start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+    end_of_day = now.replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
 
     events_result = (
         service.events()
@@ -86,3 +87,14 @@ def list_todays_events(service, max_results: int = 20) -> List[Dict[str, Any]]:
             }
         )
     return events
+
+
+def fetch_todays_events_for_credentials(
+    creds: Credentials,
+    max_results: int = 20,
+) -> List[Dict[str, Any]]:
+    """
+    Variant av list_todays_events som använder Credentials från web-sessionen.
+    """
+    service = build("calendar", "v3", credentials=creds)
+    return list_todays_events(service, max_results=max_results)

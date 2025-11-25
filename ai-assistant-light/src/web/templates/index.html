@@ -45,8 +45,8 @@
   <main class="py-4">
     <div class="container">
       <!-- Översta raden: KPI-kort -->
-      <div class="row g-3 mb-3">
-        <div class="col-6 col-lg-3">
+      <div class="row g-3 mb-3 metrics-row">
+        <div class="col-6 col-lg-4">
           <div class="card stat-card">
             <div class="card-body">
               <div class="stat-label">Olästa mejl idag</div>
@@ -57,7 +57,7 @@
             </div>
           </div>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-lg-4">
           <div class="card stat-card">
             <div class="card-body">
               <div class="stat-label">Händelser idag</div>
@@ -68,31 +68,13 @@
             </div>
           </div>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-lg-4">
           <div class="card stat-card">
             <div class="card-body">
               <div class="stat-label">Senast uppdaterad</div>
               <div class="stat-value small text-muted">{{ generated_at }}</div>
               <div class="stat-pill">
                 <i class="bi bi-cloud-check me-1"></i>Live-data
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 col-lg-3">
-          <div class="card stat-card">
-            <div class="card-body">
-              <div class="stat-label">Källa</div>
-              <div class="stat-value small">
-                {% if source != "fallback" %}
-                  <span class="badge bg-primary-subtle text-primary border-0">
-                    <i class="bi bi-magic me-1"></i>AI-sammanfattning
-                  </span>
-                {% else %}
-                  <span class="badge bg-secondary-subtle text-secondary border-0">
-                    Förenklad logik
-                  </span>
-                {% endif %}
               </div>
             </div>
           </div>
@@ -104,12 +86,18 @@
         <!-- Dagsrapport -->
         <div class="col-12 col-lg-7">
           <div class="card shadow-soft h-100">
-            <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
-              <div>
-                <h5 class="mb-0"> Dagsrapport</h5>
-                <small class="text-muted">Kort överblick över vad som är viktigt idag.</small>
+            <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center flex-wrap gap-2">
+              <div class="section-title">
+                <h5 class="mb-1">Dagsrapport</h5>
+                <p class="text-muted mb-0">Snabb inblick i vad som behöver din uppmärksamhet.</p>
               </div>
-              <span class="badge bg-gradient-primary text-white">Preview</span>
+              <span class="insight-pill {% if source != 'fallback' %}pill-ai{% else %}pill-basic{% endif %}">
+                {% if source != "fallback" %}
+                  <i class="bi bi-magic me-1"></i>AI-analys
+                {% else %}
+                  <i class="bi bi-journal-text me-1"></i>Förenklad rapport
+                {% endif %}
+              </span>
             </div>
             <div class="card-body">
               <pre class="report-text mb-0">{{ summary_text }}</pre>
@@ -122,7 +110,10 @@
           <!-- Emails -->
           <div class="card shadow-soft mb-3">
             <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
-              <h6 class="mb-0">📬 Olästa mejl</h6>
+              <h6 class="mb-0 d-flex align-items-center gap-2">
+                <span class="icon-pill icon-mail"><i class="bi bi-envelope-paper-heart"></i></span>
+                Olästa mejl
+              </h6>
               <small class="text-muted">
                 {% if emails %}{{ emails|length }} st{% else %}Inga nya{% endif %}
               </small>
@@ -153,7 +144,10 @@
           <!-- Events -->
           <div class="card shadow-soft">
             <div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center">
-              <h6 class="mb-0">📅 Dagens kalender</h6>
+              <h6 class="mb-0 d-flex align-items-center gap-2">
+                <span class="icon-pill icon-calendar"><i class="bi bi-calendar4-week"></i></span>
+                Dagens kalender
+              </h6>
               <small class="text-muted">
                 {% if events %}{{ events|length }} händelser{% else %}Tom kalender{% endif %}
               </small>
