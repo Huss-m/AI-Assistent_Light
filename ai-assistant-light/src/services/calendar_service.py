@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import pickle
 import datetime as dt
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
