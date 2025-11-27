@@ -12,4 +12,4 @@ pip install "itsdangerous>=2.1.0"
 cd C:\Users\hussa\Examenarbete\ai-assistant-light
 >> .\venv\Scripts\activate
 
-123
+1
