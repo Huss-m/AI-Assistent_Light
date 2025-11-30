@@ -56,5 +56,5 @@ jobs:
             --platform=managed \
             --allow-unauthenticated \
             --cpu=1 --memory=512Mi --max-instances=5 --concurrency=80 \
-            --set-env-vars=PYTHONUNBUFFERED=1,ENV=prod \
+            --update-env-vars=PYTHONUNBUFFERED=1,ENV=prod \
             --port=8080
