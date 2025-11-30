@@ -102,7 +102,14 @@ def auth_callback(request: Request):
         return RedirectResponse(url="/")
 
     flow = create_flow(state=state)
+
+    # Bygg URL:en som Google skickade tillbaka
     authorization_response = str(request.url)
+
+    # I Cloud Run (ENV=prod) kan den råka vara http internt -> tvinga https
+    if os.getenv("ENV") == "prod" and authorization_response.startswith("http://"):
+        authorization_response = authorization_response.replace("http://", "https://", 1)
+
     flow.fetch_token(authorization_response=authorization_response)
     creds = flow.credentials
 
@@ -125,6 +132,7 @@ def auth_callback(request: Request):
     request.session.pop("oauth_state", None)
 
     return RedirectResponse(url="/")
+
 
 
 @app.get("/logout")
