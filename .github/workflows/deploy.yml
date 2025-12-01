@@ -56,5 +56,11 @@ jobs:
             --platform=managed \
             --allow-unauthenticated \
             --cpu=1 --memory=512Mi --max-instances=5 --concurrency=80 \
-            --update-env-vars=PYTHONUNBUFFERED=1,ENV=prod \
+            --set-env-vars="PYTHONUNBUFFERED=1,ENV=prod,OAUTHLIB_RELAX_TOKEN_SCOPE=1" \
+            --set-env-vars="GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" \
+            --set-env-vars="GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+            --set-env-vars="GOOGLE_REDIRECT_URI=https://ai-assistant-light-1080004701891.europe-north1.run.app/auth/callback" \
+            --set-env-vars="SESSION_SECRET_KEY=${{ secrets.SESSION_SECRET_KEY }}" \
+            --set-env-vars="CREDENTIAL_ENC_KEY=${{ secrets.CREDENTIAL_ENC_KEY }}" \
+            --set-env-vars="OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" \
             --port=8080
