@@ -134,17 +134,17 @@ def index(request: Request):
     
     try:
         emails = fetch_unread_emails_for_credentials(creds, max_results=10)
-    except Exception as e:
+    except Exception:
         pass
     
     try:
         events = fetch_todays_events_for_credentials(creds, max_results=20)
-    except Exception as e:
+    except Exception:
         pass
 
     try:
         report = summarize_day(emails, events)
-    except Exception as e:
+    except Exception:
         report = simple_fallback_priorities(emails, events)
 
     data = {
