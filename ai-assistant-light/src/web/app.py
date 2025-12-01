@@ -1,6 +1,5 @@
 from __future__ import annotations
 import datetime as dt
-import os
 from typing import Optional
 
 from fastapi import FastAPI, Request
