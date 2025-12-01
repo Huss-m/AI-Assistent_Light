@@ -1,4 +1,3 @@
-# src/services/calendar_service.py
 from __future__ import annotations
 import os
 import pickle
@@ -18,13 +17,11 @@ CREDENTIALS_PATH = "credentials.json"
 
 
 def get_google_creds() -> Credentials:
-    # Cloud Run: använd service account credentials
     if os.getenv("ENV") == "prod":
         from google.auth import default
         prod_creds, _ = default(scopes=SCOPES)
         return prod_creds
     
-    # Lokal utveckling: använd OAuth2 flow
     local_creds: Optional[Credentials] = None
     if os.path.exists(TOKEN_PATH):
         with open(TOKEN_PATH, "rb") as f:
@@ -53,7 +50,6 @@ def build_calendar_service():
 
 
 def list_todays_events(service, max_results: int = 20) -> List[Dict[str, Any]]:
-    """Hämta dagens kalenderhändelser från primary-kalendern."""
     now = dt.datetime.now(dt.timezone.utc)
     start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
     end_of_day = now.replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
@@ -91,8 +87,5 @@ def fetch_todays_events_for_credentials(
     creds: Credentials,
     max_results: int = 20,
 ) -> List[Dict[str, Any]]:
-    """
-    Variant av list_todays_events som använder Credentials från web-sessionen.
-    """
     service = build("calendar", "v3", credentials=creds)
     return list_todays_events(service, max_results=max_results)

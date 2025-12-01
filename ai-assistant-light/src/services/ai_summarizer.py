@@ -1,4 +1,3 @@
-# src/services/ai_summarizer.py
 from __future__ import annotations
 import os
 from typing import List, Dict, Any
@@ -7,7 +6,6 @@ from openai import OpenAI
 
 
 def summarize_day(emails: List[Dict[str, Any]], events: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Försök göra en AI-sammanfattning. Faller tillbaka till enkel logik om inget API-key."""
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         return simple_fallback_priorities(emails, events)
@@ -57,7 +55,6 @@ Skriv:
 
 
 def simple_fallback_priorities(emails: List[Dict[str, Any]], events: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Enkel, offline fallback om ingen AI finns."""
     lines = []
     lines.append("Sammanfattning:")
     lines.append(f"📬 Olästa mejl: {len(emails)}")

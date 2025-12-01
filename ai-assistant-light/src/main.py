@@ -1,4 +1,3 @@
-# src/main.py
 from __future__ import annotations
 from services.gmail_service import build_gmail_service, list_today_unread
 from services.calendar_service import build_calendar_service, list_todays_events

@@ -1,15 +1,17 @@
+# AI-Assistant Light
 
-Logga in med Google i en webapp
+En webapp för att visa Gmail och Kalender-data.
 
-Packet för säker session och cookies: itsdangerous>=2.1.0   
-Detta ska vara med i requirements.txt
+## Installation
 
-cd C:\Users\hussa\Examenarbete\ai-assistant-light
+```bash
+cd ai-assistant-light
 .\venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-pip install "itsdangerous>=2.1.0"
+## Kör lokalt
 
-cd C:\Users\hussa\Examenarbete\ai-assistant-light
-
-Aktivera den virtuella miljön:
->> .\venv\Scripts\activate
+```bash
+uvicorn src.web.server:app --reload
+```

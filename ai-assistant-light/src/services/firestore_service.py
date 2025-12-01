@@ -1,4 +1,3 @@
-# src/services/firestore_service.py
 from __future__ import annotations
 
 import json
@@ -9,9 +8,6 @@ from cryptography.fernet import Fernet, InvalidToken
 from google.cloud import firestore
 from google.oauth2.credentials import Credentials
 
-# Firestore client uses Application Default Credentials:
-# - Lokalt: kör `gcloud auth application-default login`
-# - Cloud Run: använder tjänstens service account automatiskt
 _db: Optional[firestore.Client] = None
 _fernet: Optional[Fernet] = None
 
@@ -50,10 +46,6 @@ def _decrypt_credentials(token: str) -> Credentials:
 
 
 def save_user_credentials(email: str, creds: Credentials) -> None:
-    """
-    Save or update Google OAuth credentials for a user in Firestore.
-    Document ID = email.
-    """
     doc_ref = _get_db().collection("users").document(email.lower())
 
     doc_ref.set(
@@ -67,10 +59,6 @@ def save_user_credentials(email: str, creds: Credentials) -> None:
 
 
 def load_user_credentials(email: str) -> Optional[Credentials]:
-    """
-    Load Google OAuth credentials for a user from Firestore.
-    Returns None if the document does not exist.
-    """
     doc_ref = _get_db().collection("users").document(email.lower())
     snapshot = doc_ref.get()
 
@@ -82,7 +70,6 @@ def load_user_credentials(email: str) -> Optional[Credentials]:
     if encrypted:
         return _decrypt_credentials(encrypted)
 
-    # Fallback för äldre dokument utan kryptering
     legacy = data.get("credentials")
     if legacy:
         return Credentials.from_authorized_user_info(legacy)
