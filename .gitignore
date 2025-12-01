@@ -19,11 +19,13 @@ Thumbs.db
 
 # Environment / secrets
 credentials.json
+*.pickle
 token.pickle
 .env
 .env.*
 token.json
 client_secret.json
+credentials/
 
 # Misc
 *.log

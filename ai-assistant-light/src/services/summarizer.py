@@ -1,14 +1,13 @@
 from __future__ import annotations
-import os
 from typing import List, Dict, Any
 
 from openai import OpenAI
+from src.config import OPENAI_API_KEY
 
 
 def summarize_day(emails: List[Dict[str, Any]], events: List[Dict[str, Any]]) -> Dict[str, Any]:
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        return simple_fallback_priorities(emails, events)
+    if not OPENAI_API_KEY:
+        return fallback_summary(emails, events)
 
     try:
         client = OpenAI()
@@ -51,10 +50,10 @@ Skriv:
             "source": "openai",
         }
     except Exception:
-        return simple_fallback_priorities(emails, events)
+        return fallback_summary(emails, events)
 
 
-def simple_fallback_priorities(emails: List[Dict[str, Any]], events: List[Dict[str, Any]]) -> Dict[str, Any]:
+def fallback_summary(emails: List[Dict[str, Any]], events: List[Dict[str, Any]]) -> Dict[str, Any]:
     lines = []
     lines.append("Sammanfattning:")
     lines.append(f"📬 Olästa mejl: {len(emails)}")
