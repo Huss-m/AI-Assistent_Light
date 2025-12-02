@@ -22,7 +22,7 @@ from src.config import (
 from src.services.gmail import fetch_unread_emails
 from src.services.calendar import fetch_todays_events
 from src.services.summarizer import summarize_day, fallback_summary
-from src.services.storage import save_credentials, load_credentials
+from src.services.storage import save_credentials, load_credentials, clear_credentials
 
 app = FastAPI(title="AI-Assistant Light")
 
@@ -106,6 +106,9 @@ def callback(request: Request):
 
 @app.get("/logout")
 def logout(request: Request):
+    email = request.session.get("user_email")
+    if email:
+        clear_credentials(email)
     request.session.clear()
     return RedirectResponse(url="/")
 
