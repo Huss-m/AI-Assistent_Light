@@ -1,5 +1,6 @@
 from __future__ import annotations
 import datetime as dt
+from zoneinfo import ZoneInfo
 from typing import Optional
 
 from fastapi import FastAPI, Request
@@ -137,8 +138,9 @@ def index(request: Request):
     except Exception:
         report = fallback_summary(emails, events)
 
+    stockholm_tz = ZoneInfo("Europe/Stockholm")
     data = {
-        "generated_at": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "generated_at": dt.datetime.now(stockholm_tz).strftime("%Y-%m-%d %H:%M"),
         "emails": emails,
         "events": events,
         "summary_text": report["summary_text"],
