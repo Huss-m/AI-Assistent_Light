@@ -1,7 +1,7 @@
 name: Deploy to Cloud Run
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, main ]
 
 env:
   GCP_PROJECT_ID: delta-compass-477214-e7
